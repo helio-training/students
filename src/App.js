@@ -1,70 +1,43 @@
-import React, { Component } from 'react'
+import React, { Fragment } from 'react'
+import * as Yup from 'yup'
+import Routes from './Routes'
+import styled from 'styled-components'
 
-class App extends Component {
-  
-  state = {
-    name: '',
-    email: '',
-    password: '',
-  }
-  
-  render() {
-    return (
-      <form
-        onSubmit={e => {
-          e.preventDefault()
-          
-          console.log(this.state)
-          
-          
-        }}
-      >
-        <div>
-          <label htmlFor="name">Name</label>
-          <input
-            type="text"
-            name="name"
-            id="name"
-            placeholder="Name"
-            required
-            minLength="2"
-            maxLength="128"
-            onChange={e => this.setState({ name: e.target.value })}
-            value={this.state.name}
-          />
-        </div>
-        <div>
-          <label htmlFor="email">Email Address</label>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            placeholder="Email Address"
-            required
-            onChange={e => this.setState({ email: e.target.value })}
-            value={this.state.email}
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            name="password"
-            id="password"
-            placeholder="Password"
-            minLength="7"
-            maxLength="128"
-            required
-            onChange={e => this.setState({ password: e.target.value })}
-            value={this.state.password}
-          />
-        </div>
-        <div>
-          <button type="submit">Save</button>
-        </div>
-      </form>
-    )
-  }
-}
+const schema = Yup.object().shape({
+  name: Yup.string().required().min(2).max(128).trim(),
+  email: Yup.string().required().email().lowercase().trim(),
+  password: Yup.string().required().min(2).max(128).trim(),
+})
 
-export default App
+const Header = styled.header`
+  background: #311B92;
+  color: white;
+  padding: 16px;
+  
+  a {
+    color: white;
+    text-decoration: none;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+`
+
+const Main = styled.main`
+  padding: 16px;
+  flex: 1;
+`
+
+export default () => (
+  <Fragment>
+    <Header>
+      <nav>
+        <a href="/">Home</a>
+      </nav>
+    </Header>
+    <Main>
+      <Routes />
+    </Main>
+  </Fragment>
+)
