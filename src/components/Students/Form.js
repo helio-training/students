@@ -10,7 +10,7 @@ const INITIAL_VALUES = {
 }
 
 const SCHEMA = Yup.object().shape({
-  name: Yup.string().required(`Name is required`).trim().min(2).max(128),
+  name: Yup.string().required(`Name is required`).trim().min(2, `Name is at least 2 characters.`).max(128, `Name is no more than 128 characters.`),
   isActive: Yup.boolean().default(true),
 })
 
@@ -25,6 +25,31 @@ const Actions = styled.div`
   padding: 8px;
 `
 
+const RENDER_FORM = ({ values, handleChange, handleBlur }) => (
+  <Form>
+    <Fields>
+      <TextField name="name" onChange={handleChange} onBlur={handleBlur} value={values.name} label="Name" />
+      <ErrorMessage name="name" />
+    </Fields>
+    <Fields>
+      <FormControlLabel
+        control={
+          <Switch
+            name="isActive"
+            checked={values.isActive}
+            onChange={handleChange}
+            value={values.isActive}
+          />
+        }
+        label="Is Active?"
+      />
+    </Fields>
+    <Actions>
+      <Button variant="contained" size="large" color="primary" type="submit">Save</Button>
+    </Actions>
+  </Form>
+)
+
 export default class extends Component {
   
   render() {
@@ -37,30 +62,7 @@ export default class extends Component {
           onSubmit={(values) => {
             console.log(values)
           }}
-          render={({ values, handleChange, handleBlur }) => (
-            <Form>
-              <Fields>
-                <TextField name="name" onChange={handleChange} onBlur={handleBlur} value={values.name} label="Name" />
-                <ErrorMessage name="name" />
-              </Fields>
-              <Fields>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      name="isActive"
-                      checked={values.isActive}
-                      onChange={handleChange}
-                      value={values.isActive}
-                    />
-                  }
-                  label="Is Active?"
-                />
-              </Fields>
-              <Actions>
-                <Button variant="contained" size="large" color="primary" type="submit">Save</Button>
-              </Actions>
-            </Form>
-          )}
+          render={RENDER_FORM}
         />
       </Fragment>
     )
